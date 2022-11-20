@@ -85,29 +85,29 @@ public class UserControllerTest {
     }
 
     @Test
-    public void 로그인시_회원가입한적이_없다면_에러발생() throws Exception {
-        String userName = "name";
+    public void 로그인시_회원가입이_안된_userName을_입력할경우_에러반환() throws Exception {
+        String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.USER_NOT_FOUND));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest("name", "password"))))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void 로그인시_비밀번호가_다르면_에러발생() throws Exception {
-        String userName = "name";
+    public void 로그인시_틀린_password를_입력할경우_에러반환() throws Exception {
+        String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.INVALID_PASSWORD, ""));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest("name", "password"))))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
