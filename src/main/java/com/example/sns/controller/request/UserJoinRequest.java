@@ -1,7 +1,6 @@
 package com.example.sns.controller.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class UserJoinRequest {
-    private String userName;
+    private String name;
     private String password;
 }
