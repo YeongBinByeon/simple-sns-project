@@ -7,6 +7,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "\"post\"")
@@ -37,6 +39,12 @@ public class PostEntity {
 
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
+
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+//    private List<CommentEntity> commentEntityList = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+//    private List<LikeEntity> likeEntityList = new ArrayList<>();
 
 
     //@PrePersist
