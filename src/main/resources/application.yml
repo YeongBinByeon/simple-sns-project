@@ -17,9 +17,12 @@ spring:
     username: pass_local_user
     password: passlocal123
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    url: redis://127.0.0.1:6379
 
 jwt:
   secret-key: fast_campus.sns-application-2022.secret_key
   # 30day
   token:
     expired-time-ms: 2592000000
+
