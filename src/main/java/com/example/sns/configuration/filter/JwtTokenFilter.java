@@ -27,18 +27,27 @@ public class JwtTokenFilter extends OncePerRequestFilter { // 매 요청시마�
     private final String key;
     private final UserService userService;
 
+    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/v1/users/alarm/subscribe");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // get header
-        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(header == null || !header.startsWith("Bearer ")){
-            log.error("Error occurs while getting header. header is null or invalid {}", request.getRequestURL());
-            filterChain.doFilter(request, response); // 해당 단계에서 필터는 실패했지만, 남은 필터 마져 태우는 코드
-            return;
-        }
+
+        final String token;
 
         try{
-            final String token = header.split(" ")[1].trim();
+            if(TOKEN_IN_PARAM_URLS.contains(request.getRequestURI())){
+                log.info("Request with {} check the query param", request.getRequestURI());
+                token = request.getQueryString().split("=")[1].trim();
+            }
+            else{
+                final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+                if(header == null || !header.startsWith("Bearer ")){
+                    log.error("Error occurs while getting header. header is null or invalid {}", request.getRequestURL());
+                    filterChain.doFilter(request, response); // 해당 단계에서 필터는 실패했지만, 남은 필터 마져 태우는 코드
+                    return;
+                }
+                token = header.split(" ")[1].trim();
+            }
 
             // TODO : check token is valid
             if(JwtTokenUtils.isExpired(token, key)){
